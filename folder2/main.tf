@@ -104,7 +104,7 @@ resource "google_compute_instance" "tomcat-server" {
       private_key = file("~/.ssh/id_rsa")
     }
     inline = [
-      "echo ${google_compute_instance.el-server.network_interface.0.network_ip} > /tmp/ip.txt",
+      "echo ${google_compute_instance.el-server.network_interface.0.network_ip}:9200 > /tmp/ip.txt",
       "chmod +x /tmp/sh/*sh",
       "cd /tmp/sh",
       "./tomcat.sh",
