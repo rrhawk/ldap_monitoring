@@ -5,8 +5,8 @@ provider "google" {
   zone        = var.zone
 }
 
-resource "google_compute_instance" "el-server" {
-  name         = "el-server"
+resource "google_compute_instance" "zabbix-server" {
+  name         = "zabbix-server"
   machine_type = var.machine_type
 
   tags = ["http-server"]
@@ -34,7 +34,7 @@ resource "google_compute_instance" "el-server" {
       port        = var.ssh_port
       user        = var.ssh_user
       agent       = "false"
-      host        = google_compute_instance.el-server.network_interface.0.access_config.0.nat_ip
+      host        = google_compute_instance.zabbix-server.network_interface.0.access_config.0.nat_ip
       private_key = file("~/.ssh/id_rsa")
     }
     source      = "./sh"
@@ -46,21 +46,21 @@ resource "google_compute_instance" "el-server" {
       port        = var.ssh_port
       user        = var.ssh_user
       agent       = "false"
-      host        = google_compute_instance.el-server.network_interface.0.access_config.0.nat_ip
+      host        = google_compute_instance.zabbix-server.network_interface.0.access_config.0.nat_ip
       private_key = file("~/.ssh/id_rsa")
     }
     inline = [
 
-      "chmod +x /tmp/sh/*sh",
-      "cd /tmp/sh",
-      "./startup_server.sh",
+      #      "chmod +x /tmp/sh/*sh",
+      #      "cd /tmp/sh",
+      #      "./server.sh",
 
 
     ]
   }
 }
-resource "google_compute_instance" "tomcat-server" {
-  name         = "tomcat-server"
+resource "google_compute_instance" "zabbix-client" {
+  name         = "zabbix-client"
   machine_type = var.machine_type
 
   #  tags = ["http-server"]
@@ -88,7 +88,7 @@ resource "google_compute_instance" "tomcat-server" {
       port        = var.ssh_port
       user        = var.ssh_user
       agent       = "false"
-      host        = google_compute_instance.tomcat-server.network_interface.0.access_config.0.nat_ip
+      host        = google_compute_instance.zabbix-client.network_interface.0.access_config.0.nat_ip
       private_key = file("~/.ssh/id_rsa")
     }
     source      = "./sh"
@@ -100,19 +100,19 @@ resource "google_compute_instance" "tomcat-server" {
       port        = var.ssh_port
       user        = var.ssh_user
       agent       = "false"
-      host        = google_compute_instance.tomcat-server.network_interface.0.access_config.0.nat_ip
+      host        = google_compute_instance.zabbix-client.network_interface.0.access_config.0.nat_ip
       private_key = file("~/.ssh/id_rsa")
     }
     inline = [
-      "echo ${google_compute_instance.el-server.network_interface.0.network_ip}:9200 > /tmp/ip.txt",
-      "chmod +x /tmp/sh/*sh",
-      "cd /tmp/sh",
-      "./tomcat.sh",
+      #  "echo ${google_compute_instance.zabbix-client.network_interface.0.network_ip}:9200 > /tmp/ip.txt",
+      #    "chmod +x /tmp/sh/*sh",
+      #      "cd /tmp/sh",
+      #  "./client.sh",
 
 
     ]
   }
 }
 output "URL" {
-  value = "http://${google_compute_instance.el-server.network_interface.0.access_config.0.nat_ip}:5601"
+  value = "http://${google_compute_instance.zabbix-server.network_interface.0.access_config.0.nat_ip}"
 }
