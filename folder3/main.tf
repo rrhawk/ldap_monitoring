@@ -51,9 +51,9 @@ resource "google_compute_instance" "zabbix-server" {
     }
     inline = [
 
-      #      "chmod +x /tmp/sh/*sh",
-      #      "cd /tmp/sh",
-      #      "./server.sh",
+      "chmod +x /tmp/sh/*sh",
+      "cd /tmp/sh",
+      "./server.sh",
 
 
     ]
@@ -105,9 +105,9 @@ resource "google_compute_instance" "zabbix-client" {
     }
     inline = [
       #  "echo ${google_compute_instance.zabbix-client.network_interface.0.network_ip}:9200 > /tmp/ip.txt",
-      #    "chmod +x /tmp/sh/*sh",
-      #      "cd /tmp/sh",
-      #  "./client.sh",
+      "chmod +x /tmp/sh/*sh",
+      "cd /tmp/sh",
+      "./client.sh",
 
 
     ]

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sudo rm -f /etc/yum.repos.d/google-cloud.repo
 sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 sudo cp /tmp/sh/elasticsearch.repo /etc/yum.repos.d/elasticsearch.repo
